@@ -7,7 +7,7 @@
 namespace Jawel_be.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,23 +16,25 @@ namespace Jawel_be.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.id);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.InsertData(
                 table: "Categories",
-                columns: new[] { "id", "Name" },
+                columns: new[] { "Id", "DeletedAt", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Category 1" },
-                    { 2, "Category 2" },
-                    { 3, "Category 3" }
+                    { 1, null, "Nhẫn" },
+                    { 2, null, "Dây chuyền" },
+                    { 3, null, "Vòng" },
+                    { 4, null, "Bông tai" }
                 });
         }
 

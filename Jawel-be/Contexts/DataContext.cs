@@ -28,10 +28,10 @@ namespace Jawel_be.Contexts
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Category>().HasData(
-                new Category { id = 1, Name = "Category 1" },
-                new Category { id = 2, Name = "Category 2" },
-                new Category { id = 3, Name = "Category 3" }
-            // Add more categories as needed
+                new Category { Id = 1, Name = "Nhẫn" },
+                new Category { Id = 2, Name = "Dây chuyền" },
+                new Category { Id = 3, Name = "Vòng" },
+                new Category { Id = 4, Name = "Bông tai" }
             );
         }
     }
