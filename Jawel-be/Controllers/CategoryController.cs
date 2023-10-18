@@ -23,7 +23,7 @@ namespace Jawel_be.Controllers
         public async Task<IActionResult> GetCategories()
         {
             var categories = await _categoryService.GetCategories();
-            return Ok(categories.Select(c => c.AsDto()));
+            return Ok(categories.Select(c => c.AsDto()).ToList());
         }
 
         [HttpGet("{id}")]
@@ -43,11 +43,6 @@ namespace Jawel_be.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto createCategoryDto)
         {
-            if (createCategoryDto == null)
-            {
-                return BadRequest("Invalid category object");
-            }
-
             var validator = new CreateCategoryDtoValidator();
             var validationResult = await validator.ValidateAsync(createCategoryDto);
             if (!validationResult.IsValid)
@@ -64,11 +59,6 @@ namespace Jawel_be.Controllers
         {
             try
             {
-                if (updateCategoryDto == null)
-                {
-                    return BadRequest("Invalid category object");
-                }
-
                 var validator = new UpdateCategoryDtoValidator();
                 var validationResult = await validator.ValidateAsync(updateCategoryDto);
                 if (!validationResult.IsValid)
@@ -91,7 +81,7 @@ namespace Jawel_be.Controllers
             try
             {
                 await _categoryService.DeleteCategory(id);
-                return Ok("Delete successfully!");
+                return Ok();
             }
             catch (EntityNotFoundException ex)
             {

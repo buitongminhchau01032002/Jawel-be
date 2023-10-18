@@ -78,8 +78,8 @@ namespace Jawal_beTests.ServiceTests
 
             // Assert
             Assert.NotNull(result);
-            var expectedCategory = _categories.Where(c => c.Id == id).SingleOrDefault();
-            Assert.AreEqual(expectedCategory, result);
+            var expectedCategory = _categories.Find(c => c.Id == id);
+            AssertCategory(expectedCategory, result);
         }
 
         [Test]
