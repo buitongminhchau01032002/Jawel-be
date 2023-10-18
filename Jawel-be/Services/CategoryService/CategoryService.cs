@@ -15,21 +15,17 @@ namespace Jawel_be.Services.CategoryService
             _dbContext = dbContext;
         }
 
-        public async Task<List<Category>> GetCategoriesAsync()
+        public async Task<List<Category>> GetCategories()
         {
-            return await _dbContext.Categories
-                .Where(c => c.DeletedAt == null)
-                .ToListAsync();
+            return await _dbContext.Categories.ToListAsync();
         }
 
-        public async Task<Category?> GetCategoryByIdAsync(int id)
+        public async Task<Category?> GetCategoryById(int id)
         {
-            return await _dbContext.Categories
-                .Where(c => c.Id == id && c.DeletedAt == null)
-                .FirstOrDefaultAsync();
+            return await _dbContext.Categories.FindAsync(id);
         }
 
-        public async Task<Category> CreateCategoryAsync(CreateCategoryDto createCategoryDto)
+        public async Task<Category> CreateCategory(CreateCategoryDto createCategoryDto)
         {
             var newCategory = new Category { Name = createCategoryDto.Name };
             _dbContext.Categories.Add(newCategory);
@@ -37,11 +33,9 @@ namespace Jawel_be.Services.CategoryService
             return newCategory;
         }
 
-        public async Task<Category> UpdateCategoryAsync(int id, UpdateCategoryDto updateCategoryDto)
+        public async Task<Category> UpdateCategory(int id, UpdateCategoryDto updateCategoryDto)
         {
-            var existingCategory = await _dbContext.Categories
-                .Where(c => c.Id == id && c.DeletedAt == null)
-                .FirstOrDefaultAsync();
+            var existingCategory = await _dbContext.Categories.FindAsync(id);
 
             if (existingCategory != null)
             {
@@ -58,15 +52,12 @@ namespace Jawel_be.Services.CategoryService
             }
         }
 
-        public async Task DeleteCategoryAsync(int id)
+        public async Task DeleteCategory(int id)
         {
-            var category = await _dbContext.Categories
-                .Where(c => c.Id == id && c.DeletedAt == null)
-                .FirstOrDefaultAsync();
-
+            var category = await _dbContext.Categories.FindAsync(id);
             if (category != null)
             {
-                category.DeletedAt = DateTime.Now;
+                _dbContext.Categories.Remove(category);
                 await _dbContext.SaveChangesAsync();
             }
             else

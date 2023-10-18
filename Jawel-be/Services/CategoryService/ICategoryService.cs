@@ -5,10 +5,10 @@ namespace Jawel_be.Services.CategoryService
 {
     public interface ICategoryService
     {
-        Task<List<Category>> GetCategoriesAsync();
-        Task<Category?> GetCategoryByIdAsync(int id);
-        Task<Category> CreateCategoryAsync(CreateCategoryDto createCategoryDto);
-        Task<Category> UpdateCategoryAsync(int id, UpdateCategoryDto updateCategoryDto);
-        Task DeleteCategoryAsync(int id);
+        Task<List<Category>> GetCategories();
+        Task<Category?> GetCategoryById(int id);
+        Task<Category> CreateCategory(CreateCategoryDto createCategoryDto);
+        Task<Category> UpdateCategory(int id, UpdateCategoryDto updateCategoryDto);
+        Task DeleteCategory(int id);
     }
 }

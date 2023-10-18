@@ -22,14 +22,14 @@ namespace Jawel_be.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCategories()
         {
-            var categories = await _categoryService.GetCategoriesAsync();
+            var categories = await _categoryService.GetCategories();
             return Ok(categories.Select(c => c.AsDto()));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategory(int id)
         {
-            var category = await _categoryService.GetCategoryByIdAsync(id);
+            var category = await _categoryService.GetCategoryById(id);
 
             if (category == null)
             {
@@ -55,7 +55,7 @@ namespace Jawel_be.Controllers
                 return BadRequest(validationResult.Errors);
             }
 
-            Category newCategory = await _categoryService.CreateCategoryAsync(createCategoryDto);
+            Category newCategory = await _categoryService.CreateCategory(createCategoryDto);
             return CreatedAtAction(nameof(GetCategory), new { id = newCategory.Id }, newCategory.AsDto());
         }
 
@@ -76,7 +76,7 @@ namespace Jawel_be.Controllers
                     return BadRequest(validationResult.Errors);
                 }
 
-                var category = await _categoryService.UpdateCategoryAsync(id, updateCategoryDto);
+                var category = await _categoryService.UpdateCategory(id, updateCategoryDto);
                 return Ok(category.AsDto());
             }
             catch (EntityNotFoundException ex)
@@ -90,7 +90,7 @@ namespace Jawel_be.Controllers
         {
             try
             {
-                await _categoryService.DeleteCategoryAsync(id);
+                await _categoryService.DeleteCategory(id);
                 return Ok("Delete successfully!");
             }
             catch (EntityNotFoundException ex)
