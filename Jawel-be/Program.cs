@@ -1,6 +1,7 @@
 // Stryker disable all
 using Jawel_be.Contexts;
 using Jawel_be.Services.CategoryService;
+using Jawel_be.Services.ProductService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(option => option.UseSqlServer("Server=DESKTOP-QD7JEVF\\SQLEXPRESS;Database=jawel;Trusted_Connection=true;TrustServerCertificate=true;"));
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 
