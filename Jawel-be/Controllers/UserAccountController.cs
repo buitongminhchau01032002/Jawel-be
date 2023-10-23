@@ -3,6 +3,7 @@ using Jawel_be.Exceptions;
 using Jawel_be.Models;
 using Jawel_be.Services.UserAccountService;
 using Jawel_be.Utils;
+using Jawel_be.Validators.UserAccount;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jawel_be.Controllers
@@ -46,12 +47,12 @@ namespace Jawel_be.Controllers
         {
             try
             {
-                //var validator = new CreateUserAccountDtoValidator();
-                //var validationResult = await validator.ValidateAsync(createUserAccountDto);
-                //if (!validationResult.IsValid)
-                //{
-                //    return BadRequest(validationResult.Errors);
-                //}
+                var validator = new CreateUserAccountDtoValidator();
+                var validationResult = await validator.ValidateAsync(createUserAccountDto);
+                if (!validationResult.IsValid)
+                {
+                    return BadRequest(validationResult.Errors);
+                }
 
                 UserAccount newUserAccount = await _userAccountService.CreateUserAccount(createUserAccountDto);
                 return CreatedAtAction(nameof(GetUserAccount), new { id = newUserAccount.Id }, newUserAccount.AsDto());
@@ -65,12 +66,12 @@ namespace Jawel_be.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserAccountDto loginUserAccountDto)
         {
-            //var validator = new LoginUserAccountDtoValidator();
-            //var validationResult = await validator.ValidateAsync(loginUserAccountDto);
-            //if (!validationResult.IsValid)
-            //{
-            //    return BadRequest(validationResult.Errors);
-            //}
+            var validator = new LoginUserAccountDtoValidator();
+            var validationResult = await validator.ValidateAsync(loginUserAccountDto);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
             var hashPassword = HashPassword.GetMD5(loginUserAccountDto.Password);
             var userAccount = await _userAccountService.GetUserAccountByUsernameAndPassword(loginUserAccountDto.Username, hashPassword);
             
@@ -99,12 +100,12 @@ namespace Jawel_be.Controllers
         {
             try
             {
-                //var validator = new UpdateUserAccountDtoValidator();
-                //var validationResult = await validator.ValidateAsync(updateUserAccountDto);
-                //if (!validationResult.IsValid)
-                //{
-                //    return BadRequest(validationResult.Errors);
-                //}
+                var validator = new UpdateUserAccountDtoValidator();
+                var validationResult = await validator.ValidateAsync(updateUserAccountDto);
+                if (!validationResult.IsValid)
+                {
+                    return BadRequest(validationResult.Errors);
+                }
 
                 var userAccount = await _userAccountService.UpdateUserAccount(id, updateUserAccountDto);
                 return Ok(userAccount.AsDto());
@@ -120,12 +121,12 @@ namespace Jawel_be.Controllers
         {
             try
             {
-                //var validator = new UpdatePersonalInfoUserAccountDtoValidator();
-                //var validationResult = await validator.ValidateAsync(changePasswordUserAccountDto);
-                //if (!validationResult.IsValid)
-                //{
-                //    return BadRequest(validationResult.Errors);
-                //}
+                var validator = new UpdatePersonalInfoUserAccountDtoValidator();
+                var validationResult = await validator.ValidateAsync(updatePersonalInfoUserAccountDto);
+                if (!validationResult.IsValid)
+                {
+                    return BadRequest(validationResult.Errors);
+                }
 
                 var UpdateUserAccountDto = new UpdateUserAccountDto()
                 {
@@ -147,12 +148,12 @@ namespace Jawel_be.Controllers
         {
             try
             {
-                //var validator = new ChangePasswordAccountDtoValidator();
-                //var validationResult = await validator.ValidateAsync(changePasswordUserAccountDto);
-                //if (!validationResult.IsValid)
-                //{
-                //    return BadRequest(validationResult.Errors);
-                //}
+                var validator = new ChangePasswordUserAccountDtoValidator();
+                var validationResult = await validator.ValidateAsync(changePasswordUserAccountDto);
+                if (!validationResult.IsValid)
+                {
+                    return BadRequest(validationResult.Errors);
+                }
 
                 var hashPassword = new ChangePasswordUserAccountDto()
                 {

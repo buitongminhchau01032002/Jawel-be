@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Jawel_be.Dtos.Category;
+using Jawel_be.Dtos.CustomerAccount;
 using Jawel_be.Dtos.Product;
 using Jawel_be.Dtos.UserAccount;
 using Jawel_be.Models;
@@ -53,6 +54,7 @@ namespace Jawel_be.Utils
                 Category = product.Category?.AsDto(),
             };
         }
+
         public static UserAccountDto AsDto(this UserAccount userAccount)
         {
             return new UserAccountDto()
@@ -64,6 +66,19 @@ namespace Jawel_be.Utils
                 Avatar = userAccount.Avatar,
                 Role = userAccount.Role,
                 Status = userAccount.Status,
+            };
+        }
+
+        public static CustomerAccountDto AsDto(this CustomerAccount customerAccount)
+        {
+            return new CustomerAccountDto()
+            {
+                Id = customerAccount.Id,
+                Phone = customerAccount.Phone,
+                Name = customerAccount.Name,
+                Gender = customerAccount.Gender,
+                Avatar = customerAccount.Avatar,
+                Address = customerAccount.Address,
             };
         }
 

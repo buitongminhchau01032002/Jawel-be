@@ -1,6 +1,7 @@
 // Stryker disable all
 using Jawel_be.Contexts;
 using Jawel_be.Services.CategoryService;
+using Jawel_be.Services.CustomerAccountService;
 using Jawel_be.Services.ProductService;
 using Jawel_be.Services.UserAccountService;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ builder.Services.AddDbContext<DataContext>(option => option.UseSqlServer(builder
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserAccountService, UserAccountService>();
+builder.Services.AddScoped<ICustomerAccountService, CustomerAccountService>();
 
 var app = builder.Build();
 

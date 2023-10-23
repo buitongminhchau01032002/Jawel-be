@@ -19,6 +19,7 @@ namespace Jawel_be.Contexts
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<UserAccount> UserAccounts { get; set; }
+        public virtual DbSet<CustomerAccount> CustomerAccounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +33,10 @@ namespace Jawel_be.Contexts
 
             modelBuilder.Entity<UserAccount>()
                 .HasIndex(u => u.Username)
+                .IsUnique();
+
+            modelBuilder.Entity<CustomerAccount>()
+                .HasIndex(x => x.Phone)
                 .IsUnique();
 
             modelBuilder.Entity<Category>().HasData(
