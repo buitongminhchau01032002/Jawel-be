@@ -44,12 +44,12 @@ namespace Jawel_be.Controllers
         {
             try
             {
-                //var validator = new CreateProductDtoValidator();
-                //var validationResult = await validator.ValidateAsync(createProductDto);
-                //if (!validationResult.IsValid)
-                //{
-                //    return BadRequest(validationResult.Errors);
-                //}
+                var validator = new CreateProductDtoValidator();
+                var validationResult = await validator.ValidateAsync(createProductDto);
+                if (!validationResult.IsValid)
+                {
+                    return BadRequest(validationResult.Errors);
+                }
 
                 Product newProduct = await _productService.CreateProduct(createProductDto);
                 return CreatedAtAction(nameof(GetProduct), new { id = newProduct.Id }, newProduct.AsDto());
@@ -65,12 +65,12 @@ namespace Jawel_be.Controllers
         {
             try
             {
-                //var validator = new UpdateProductDtoValidator();
-                //var validationResult = await validator.ValidateAsync(updateProductDto);
-                //if (!validationResult.IsValid)
-                //{
-                //    return BadRequest(validationResult.Errors);
-                //}
+                var validator = new UpdateProductDtoValidator();
+                var validationResult = await validator.ValidateAsync(updateProductDto);
+                if (!validationResult.IsValid)
+                {
+                    return BadRequest(validationResult.Errors);
+                }
 
                 var product = await _productService.UpdateProduct(id, updateProductDto);
                 return Ok(product.AsDto());

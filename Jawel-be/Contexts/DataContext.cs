@@ -18,16 +18,11 @@ namespace Jawel_be.Contexts
 
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<UserAccount> UserAccounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            //modelBuilder.Entity<Category>()
-            //    .HasMany<Product>()
-            //    .WithOne(p => p.Category)
-            //    .HasForeignKey(p => p.Category)
-            //    .IsRequired();
 
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)
@@ -35,7 +30,9 @@ namespace Jawel_be.Contexts
                 .HasForeignKey(p => p.CategoryId)
                 .IsRequired();
 
-
+            modelBuilder.Entity<UserAccount>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
 
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Nhẫn" },

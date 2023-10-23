@@ -7,7 +7,7 @@ namespace Jawel_be.Validators.Category
     {
         public UpdateCategoryDtoValidator()
         {
-            RuleFor(p => p.Name).NotEmpty().MaximumLength(100);
+            RuleFor(c => c.Name).NotEmpty().MaximumLength(100);
         }
     }
 }
