@@ -71,10 +71,6 @@ namespace Jawel_be.Services.UserAccountService
                 {
                     existingUserAccount.Gender = updateUserAccountDto.Gender;
                 }
-                if (updateUserAccountDto.Avatar != null)
-                {
-                    existingUserAccount.Avatar = updateUserAccountDto.Avatar;
-                }
                 if (updateUserAccountDto.Status != null)
                 {
                     existingUserAccount.Status = updateUserAccountDto.Status;
