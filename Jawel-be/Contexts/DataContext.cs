@@ -38,25 +38,25 @@ namespace Jawel_be.Contexts
                 .HasIndex(x => x.Phone)
                 .IsUnique();
 
-            modelBuilder.Entity<Category>().HasData(
-                new Category { Id = 1, Name = "Nhẫn" },
-                new Category { Id = 2, Name = "Dây chuyền" },
-                new Category { Id = 3, Name = "Vòng" },
-                new Category { Id = 4, Name = "Bông tai" }
-            );
+            //modelBuilder.Entity<Category>().HasData(
+            //    new Category { Id = 1, Name = "Nhẫn" },
+            //    new Category { Id = 2, Name = "Dây chuyền" },
+            //    new Category { Id = 3, Name = "Vòng" },
+            //    new Category { Id = 4, Name = "Bông tai" }
+            //);
 
-            modelBuilder.Entity<Product>().HasData(
-                new Product
-                {
-                    Id = 1,
-                    Name = "Nhẫn gì đó",
-                    Description = "Mô tả",
-                    Cost = 200000,
-                    Price = 300000,
-                    Quantity = 1,
-                    CategoryId = 1
-                }
-            );
+            //modelBuilder.Entity<Product>().HasData(
+            //    new Product
+            //    {
+            //        Id = 1,
+            //        Name = "Nhẫn gì đó",
+            //        Description = "Mô tả",
+            //        Cost = 200000,
+            //        Price = 300000,
+            //        Quantity = 1,
+            //        CategoryId = 1
+            //    }
+            //);
 
 
         }
