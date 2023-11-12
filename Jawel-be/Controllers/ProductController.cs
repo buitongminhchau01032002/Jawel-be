@@ -3,6 +3,7 @@ using Jawel_be.Exceptions;
 using Jawel_be.Models;
 using Jawel_be.Services.ProductService;
 using Jawel_be.Utils;
+using Jawel_be.Validators.Product;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jawel_be.Controllers

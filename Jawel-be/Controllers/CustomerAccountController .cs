@@ -73,7 +73,7 @@ namespace Jawel_be.Controllers
                 return BadRequest(validationResult.Errors);
             }
             var hashPassword = HashPassword.GetMD5(loginCustomerAccountDto.Password);
-            var customerAccount = await _customerAccountService.GetCustomerAccountByPhoneAndPassword(loginCustomerAccountDto.Customername, hashPassword);
+            var customerAccount = await _customerAccountService.GetCustomerAccountByPhoneAndPassword(loginCustomerAccountDto.Phone, hashPassword);
             
             if (customerAccount != null)
             {
