@@ -1,10 +1,8 @@
-﻿using Azure;
-using Jawel_be.Controllers;
+﻿using Jawel_be.Controllers;
 using Jawel_be.Dtos.Category;
 using Jawel_be.Exceptions;
 using Jawel_be.Models;
 using Jawel_be.Services.CategoryService;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -88,7 +86,7 @@ namespace Jawal_beTests.ControllerTests
         {
             // Arrange
             CreateCategoryDto createCategory = new CreateCategoryDto() { Name = "New category" };
-            _mockService.Setup(m => m.CreateCategory(createCategory)).ReturnsAsync(new Category() { Name = createCategory.Name});
+            _mockService.Setup(m => m.CreateCategory(createCategory)).ReturnsAsync(new Category() { Name = createCategory.Name });
 
             // Act
             var actionResult = await _controller.CreateCategory(createCategory);

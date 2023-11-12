@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Jawel_be.Models
+﻿namespace Jawel_be.Models
 {
     public class Category
     {

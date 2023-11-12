@@ -3,7 +3,6 @@ using Jawel_be.Dtos.Product;
 using Jawel_be.Exceptions;
 using Jawel_be.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace Jawel_be.Services.ProductService
 {
@@ -36,14 +35,14 @@ namespace Jawel_be.Services.ProductService
             {
                 throw new EntityNotFoundException();
             }
-            var newProduct = new Product 
-            { 
+            var newProduct = new Product
+            {
                 Name = createProductDto.Name,
-                Description= createProductDto.Description,
-                Image= createProductDto.Image,
-                Cost= createProductDto.Cost,
+                Description = createProductDto.Description,
+                Image = createProductDto.Image,
+                Cost = createProductDto.Cost,
                 Price = createProductDto.Price,
-                Quantity= createProductDto.Quantity,
+                Quantity = createProductDto.Quantity,
                 CategoryId = createProductDto.CategoryId,
                 Category = category
             };

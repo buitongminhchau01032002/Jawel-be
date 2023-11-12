@@ -74,7 +74,7 @@ namespace Jawel_be.Controllers
             }
             var hashPassword = HashPassword.GetMD5(loginUserAccountDto.Password);
             var userAccount = await _userAccountService.GetUserAccountByUsernameAndPassword(loginUserAccountDto.Username, hashPassword);
-            
+
             if (userAccount != null)
             {
                 Jwt jwt = new Jwt(_config);
@@ -89,7 +89,8 @@ namespace Jawel_be.Controllers
                     Token = jwt.GenerateToken(userAccount)
                 };
                 return Ok(loginResultDto);
-            } else
+            }
+            else
             {
                 return BadRequest();
             }

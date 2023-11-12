@@ -42,8 +42,8 @@ namespace Jawel_be.Services.CustomerAccountService
             {
                 throw new AlreadyExistCustomerAccountException();
             }
-            var newCustomerAccount = new CustomerAccount 
-            { 
+            var newCustomerAccount = new CustomerAccount
+            {
                 Phone = createCustomerAccountDto.Phone,
                 Password = createCustomerAccountDto.Password,
                 Name = createCustomerAccountDto.Name,
@@ -69,10 +69,6 @@ namespace Jawel_be.Services.CustomerAccountService
                 if (updateCustomerAccountDto.Gender != null)
                 {
                     existingCustomerAccount.Gender = updateCustomerAccountDto.Gender;
-                }
-                if (updateCustomerAccountDto.Avatar != null)
-                {
-                    existingCustomerAccount.Avatar = updateCustomerAccountDto.Avatar;
                 }
                 if (updateCustomerAccountDto.Address != null)
                 {

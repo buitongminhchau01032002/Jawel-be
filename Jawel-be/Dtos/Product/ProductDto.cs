@@ -1,5 +1,4 @@
 ﻿using Jawel_be.Dtos.Category;
-using Jawel_be.Models;
 
 namespace Jawel_be.Dtos.Product
 {

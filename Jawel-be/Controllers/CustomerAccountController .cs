@@ -74,7 +74,7 @@ namespace Jawel_be.Controllers
             }
             var hashPassword = HashPassword.GetMD5(loginCustomerAccountDto.Password);
             var customerAccount = await _customerAccountService.GetCustomerAccountByPhoneAndPassword(loginCustomerAccountDto.Phone, hashPassword);
-            
+
             if (customerAccount != null)
             {
                 Jwt jwt = new Jwt(_config);
@@ -85,11 +85,12 @@ namespace Jawel_be.Controllers
                     Name = customerAccount.Name,
                     Gender = customerAccount.Gender,
                     Avatar = customerAccount.Avatar,
-                    Address= customerAccount.Address,
+                    Address = customerAccount.Address,
                     Token = jwt.GenerateToken(customerAccount)
                 };
                 return Ok(loginResultDto);
-            } else
+            }
+            else
             {
                 return BadRequest();
             }

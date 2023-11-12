@@ -42,8 +42,8 @@ namespace Jawel_be.Services.UserAccountService
             {
                 throw new AlreadyExistUserAccountException();
             }
-            var newUserAccount = new UserAccount 
-            { 
+            var newUserAccount = new UserAccount
+            {
                 Username = createUserAccountDto.Username,
                 Password = createUserAccountDto.Password,
                 Name = createUserAccountDto.Name,

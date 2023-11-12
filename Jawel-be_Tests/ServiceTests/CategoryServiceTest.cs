@@ -1,9 +1,9 @@
 ﻿using Jawel_be.Contexts;
+using Jawel_be.Dtos.Category;
+using Jawel_be.Exceptions;
 using Jawel_be.Models;
 using Jawel_be.Services.CategoryService;
-using Jawel_be.Dtos.Category;
 using Microsoft.EntityFrameworkCore;
-using Jawel_be.Exceptions;
 
 namespace Jawal_beTests.ServiceTests
 {
