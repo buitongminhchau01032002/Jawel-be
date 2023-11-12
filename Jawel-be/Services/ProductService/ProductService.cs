@@ -68,10 +68,10 @@ namespace Jawel_be.Services.ProductService
                 {
                     existingProduct.Description = updateProductDto.Description;
                 }
-                if (updateProductDto.Image != null)
-                {
-                    existingProduct.Image = updateProductDto.Image;
-                }
+                //if (updateProductDto.Image != null)
+                //{
+                //    existingProduct.Image = updateProductDto.Image;
+                //}
                 if (updateProductDto.Cost != null)
                 {
                     existingProduct.Cost = (int)updateProductDto.Cost;
