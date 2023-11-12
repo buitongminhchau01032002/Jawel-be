@@ -57,9 +57,9 @@ namespace Jawel_be.Controllers
                 UserAccount newUserAccount = await _userAccountService.CreateUserAccount(createUserAccountDto);
                 return CreatedAtAction(nameof(GetUserAccount), new { id = newUserAccount.Id }, newUserAccount.AsDto());
             }
-            catch (EntityNotFoundException ex)
+            catch (AlreadyExistUserAccountException ex)
             {
-                return NotFound();
+                return BadRequest();
             }
         }
 

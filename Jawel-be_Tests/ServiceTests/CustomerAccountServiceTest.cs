@@ -21,9 +21,10 @@ namespace Jawal_beTests.ServiceTests
         {
             _customers = new List<CustomerAccount>()
             {
-                new CustomerAccount {Id=1, Phone = "1", Name = "Tester1", Password="1", Gender="Nam" },
-                 new CustomerAccount {Id=2, Phone = "2", Name = "Tester2", Password="2", Gender="Nam" }
+                new CustomerAccount {Id=1, Phone = "1", Name = "Tester1", Password="1", Gender="Male" },
+                 new CustomerAccount {Id=2, Phone = "2", Name = "Tester2", Password="2", Gender="Male" }
             };
+           
             // Setup test db
             var options = new DbContextOptionsBuilder<DataContext>()
                 .UseInMemoryDatabase(databaseName: "testDB")
@@ -97,7 +98,7 @@ namespace Jawal_beTests.ServiceTests
         public async Task CreateCustomerAccount__SuccessAndReturnNewCustomerAccount()
         {
             // Arrange
-            var newCustomerAccount = new CreateCustomerAccountDto() { Phone = "3", Name = "Tester3", Password = "3", Gender = "Nam" };
+            var newCustomerAccount = new CreateCustomerAccountDto() { Phone = "3", Name = "Tester3", Password = "3", Gender = "Male" };
 
             // Act
             var result = await _customerAccountService.CreateCustomerAccount(newCustomerAccount);
@@ -116,7 +117,7 @@ namespace Jawal_beTests.ServiceTests
         {
             try {
             //Arange
-            var newCustomerAccount = new CreateCustomerAccountDto() { Phone = "1", Name = "Tester3", Password = "3", Gender = "Nam" };
+            var newCustomerAccount = new CreateCustomerAccountDto() { Phone = "1", Name = "Tester3", Password = "3", Gender = "Male" };
                 //Act
                 await _customerAccountService.CreateCustomerAccount(newCustomerAccount);
                 //Assert
