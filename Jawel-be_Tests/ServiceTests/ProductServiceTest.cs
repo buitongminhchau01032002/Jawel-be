@@ -210,7 +210,7 @@ namespace Jawal_beTests.ServiceTests
                     Cost = 200,
                     Price = 800000,
                     Quantity = 5,
-                    CategoryId = 4,
+                    CategoryId = 7,
                 };
 
                 // Act
