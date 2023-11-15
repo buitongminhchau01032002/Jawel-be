@@ -13,12 +13,10 @@ namespace Jawel_be.Controllers
     public class UserAccountController : ControllerBase
     {
         private readonly IUserAccountService _userAccountService;
-        private readonly IConfiguration _config;
 
-        public UserAccountController(IUserAccountService userAccountService, IConfiguration config)
+        public UserAccountController(IUserAccountService userAccountService)
         {
             _userAccountService = userAccountService;
-            _config = config;
         }
 
         [HttpGet]
@@ -62,7 +60,7 @@ namespace Jawel_be.Controllers
                 return BadRequest();
             }
         }
-       
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUserAccount(int id, [FromBody] UpdateUserAccountDto updateUserAccountDto)

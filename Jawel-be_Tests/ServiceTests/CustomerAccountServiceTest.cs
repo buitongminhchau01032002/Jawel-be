@@ -14,7 +14,7 @@ namespace Jawal_beTests.ServiceTests
         private DataContext _dbContext;
         private DataContext _dbContextTest;
 
-        
+
 
         [SetUp]
         public void SetUp()
@@ -24,7 +24,7 @@ namespace Jawal_beTests.ServiceTests
                 new CustomerAccount {Id=1, Phone = "1", Name = "Tester1", Password="1", Gender="Male" },
                  new CustomerAccount {Id=2, Phone = "2", Name = "Tester2", Password="2", Gender="Male" }
             };
-           
+
             // Setup test db
             var options = new DbContextOptionsBuilder<DataContext>()
                 .UseInMemoryDatabase(databaseName: "testDB")
@@ -115,15 +115,16 @@ namespace Jawal_beTests.ServiceTests
 
         public async Task CreateCustomerAccount_AlreadyExistCustomerAccount_ThrowAlreadyExistCustomerAccountException()
         {
-            try {
-            //Arange
-            var newCustomerAccount = new CreateCustomerAccountDto() { Phone = "1", Name = "Tester3", Password = "3", Gender = "Male" };
+            try
+            {
+                //Arange
+                var newCustomerAccount = new CreateCustomerAccountDto() { Phone = "1", Name = "Tester3", Password = "3", Gender = "Male" };
                 //Act
                 await _customerAccountService.CreateCustomerAccount(newCustomerAccount);
                 //Assert
                 Assert.Fail();
             }
-            catch(AlreadyExistCustomerAccountException ax)
+            catch (AlreadyExistCustomerAccountException ax)
             {
                 Assert.Pass();
             }
@@ -135,7 +136,7 @@ namespace Jawal_beTests.ServiceTests
         public async Task UpdateCustomerAccount_ExistIdAndUpdateName_SuccessAndReturnUpdatedCustomerAccount(int id)
         {
             // Arrange
-            var updateCustomerAccount = new UpdateCustomerAccountDto() { Name = "Updated name", Gender = "Updated Gender", Address="Updated Adress" };
+            var updateCustomerAccount = new UpdateCustomerAccountDto() { Name = "Updated name", Gender = "Updated Gender", Address = "Updated Adress" };
 
             // Act
             var result = await _customerAccountService.UpdateCustomerAccount(id, updateCustomerAccount);
@@ -171,7 +172,7 @@ namespace Jawal_beTests.ServiceTests
             try
             {
                 // Arrange
-                var updateCustomerAccount = new UpdateCustomerAccountDto() { Name = "Updated name", Gender = "Updated Gender", Address="Updated Address" };
+                var updateCustomerAccount = new UpdateCustomerAccountDto() { Name = "Updated name", Gender = "Updated Gender", Address = "Updated Address" };
 
                 // Act
                 var result = await _customerAccountService.UpdateCustomerAccount(id, updateCustomerAccount);
@@ -246,6 +247,8 @@ namespace Jawal_beTests.ServiceTests
         [Test]
         [TestCase("0", "0")]
         [TestCase("3", "3")]
+        [TestCase("1", "7")]
+        [TestCase("8", "1")]
         public async Task GetCustomerAccountByPhoneAndPassword_NotExistPhoneAndPassword_ReturnNull(string phone, string password)
         {
             var result = await _customerAccountService.GetCustomerAccountByPhoneAndPassword(phone, password);
@@ -273,8 +276,8 @@ namespace Jawal_beTests.ServiceTests
             // Assert
             Assert.Pass();
         }
-        
-       
+
+
         [Test]
         [TestCase(0)]
         [TestCase(3)]
@@ -286,7 +289,7 @@ namespace Jawal_beTests.ServiceTests
                 var changePasswordCustomerAccount = new ChangePasswordCustomerAccountDto() { CurrentPassword = "1", NewPassword = "3" };
 
                 // Act
-                 await _customerAccountService.ChangePasswordCustomerAccount(id, changePasswordCustomerAccount);
+                await _customerAccountService.ChangePasswordCustomerAccount(id, changePasswordCustomerAccount);
 
                 // Assert
                 Assert.Fail();

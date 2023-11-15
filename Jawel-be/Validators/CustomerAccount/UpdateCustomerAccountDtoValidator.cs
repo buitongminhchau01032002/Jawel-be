@@ -10,7 +10,6 @@ namespace Jawel_be.Validators.CustomerAccount
         {
             RuleFor(x => x.Name).NotEmpty();
             RuleFor(x => x.Gender).In("Male", "Female");
-            RuleFor(x => x.Address).NotEmpty();
         }
     }
 }

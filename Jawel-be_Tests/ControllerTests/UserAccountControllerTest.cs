@@ -1,20 +1,12 @@
 ﻿using Jawel_be.Controllers;
 using Jawel_be.Dtos.UserAccount;
-using Jawel_be.Dtos.UserAccount;
-using Jawel_be.Dtos.UserAccount;
-using Jawel_be.Dtos.UserAccount;
 using Jawel_be.Exceptions;
 using Jawel_be.Models;
 using Jawel_be.Services.UserAccountService;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using System.Reflection;
 
 namespace Jawal_beTests.ControllerTests
 {
@@ -51,10 +43,8 @@ namespace Jawal_beTests.ControllerTests
                 },
             };
 
-            IConfiguration config = new ConfigurationBuilder().Build();
-
             _mockService = new Mock<IUserAccountService>();
-            _controller = new UserAccountController(_mockService.Object, config);
+            _controller = new UserAccountController(_mockService.Object);
         }
 
         [Test]
@@ -111,17 +101,20 @@ namespace Jawal_beTests.ControllerTests
         }
 
         [Test]
-        public async Task CreateUserAccount_Valid_ReturnOkAndValueIsNewUserAccount()
+        [TestCase("username", "password", "Chau", "Male", "Admin", "Active")]
+        [TestCase("username", "password", "Chau", "Female", "Employee", "Active")]
+        [TestCase("username", "password", "Chau", "Female", "Employee", "Inactive")]
+        public async Task CreateUserAccount_Valid_ReturnOkAndValueIsNewUserAccount(string username, string password, string name, string gender, string role, string status)
         {
             // Arrange
             CreateUserAccountDto createUserAccount = new CreateUserAccountDto
             {
-                Username = "test3",
-                Password = "testtest",
-                Name = "Minh Chau",
-                Gender = "Male",
-                Role = "Admin",
-                Status = "Active"
+                Username = username,
+                Password = password,
+                Name = name,
+                Gender = gender,
+                Role = role,
+                Status = status
             };
 
             _mockService.Setup(m => m.CreateUserAccount(createUserAccount)).ReturnsAsync(new UserAccount
@@ -145,17 +138,29 @@ namespace Jawal_beTests.ControllerTests
         }
 
         [Test]
-        public async Task CreateUserAccount_Invalid_ReturnBadRequest()
+        // invalid username
+        [TestCase("", "password", "Chau", "Male", "Admin", "Active")]
+        // invalid password
+        [TestCase("username", "pass", "Chau", "Male", "Admin", "Active")]
+        // invalid name
+        [TestCase("username", "password", "" , "Male", "Admin", "Active")]
+        // invalid gender
+        [TestCase("username", "password", "Chau", "dsfas", "Admin", "Active")]
+        // invalide role
+        [TestCase("username", "password", "Chau", "Female", "dfsd", "Active")]
+        // invalide status
+        [TestCase("username", "password", "Chau", "Female", "Employee", "aaa")]
+        public async Task CreateUserAccount_Invalid_ReturnBadRequest(string username, string password, string name, string gender, string role, string status)
         {
             // Arrange
             CreateUserAccountDto createUserAccount = new CreateUserAccountDto
             {
-                Username = "",
-                Password = "testtest",
-                Name = "Minh Chau",
-                Gender = "Male",
-                Role = "Admin",
-                Status = "Active"
+                Username = username,
+                Password = password,
+                Name = name,
+                Gender = gender,
+                Role = role,
+                Status = status
             };
 
             _mockService.Setup(m => m.CreateUserAccount(createUserAccount)).ReturnsAsync(new UserAccount
@@ -204,7 +209,7 @@ namespace Jawal_beTests.ControllerTests
         public async Task UpdateUserAccount_ExistIdAndValidName_ReturnOkAndValueIsUpdatedUserAccount(int id)
         {
             // Arrange
-            UpdateUserAccountDto updateUserAccountDto = new UpdateUserAccountDto() 
+            UpdateUserAccountDto updateUserAccountDto = new UpdateUserAccountDto()
             {
                 Name = "Minh Chau 2",
                 Gender = "Female",
@@ -231,7 +236,17 @@ namespace Jawal_beTests.ControllerTests
 
         // Name, Gender, Role, Status
         [Test]
-        [TestCase(1, "", "abc", "abc", "abc")]
+        // invalid name
+        [TestCase(1, "", "Male", "Admin", "Active")]
+        // invalid gender
+        [TestCase(1, "Chau", "", "Admin", "Active")]
+        [TestCase(1, "Chau", "dsfas", "Admin", "Active")]
+        // invalide role
+        [TestCase(1, "Chau", "Male", "", "Active")]
+        [TestCase(1, "Chau", "Female", "dfsd", "Active")]
+        // invalide status
+        [TestCase(1, "Chau", "Male", "Admin", "")]
+        [TestCase(1, "Chau", "Female", "Employee", "aaa")]
         public async Task UpdateUserAccount_ExistIdAndInvalid_ReturnBadRequest(int id, string name, string gender, string role, string status)
         {
             // Arrange
@@ -263,7 +278,7 @@ namespace Jawal_beTests.ControllerTests
         public async Task UpdateUserAccount_NotExistId_ReturnNotFound(int id)
         {
             // Arrange
-            UpdateUserAccountDto updateUserAccountDto = new UpdateUserAccountDto() 
+            UpdateUserAccountDto updateUserAccountDto = new UpdateUserAccountDto()
             {
                 Name = "Minh Chau 2",
                 Gender = "Female",
@@ -351,6 +366,8 @@ namespace Jawal_beTests.ControllerTests
 
         [Test]
         [TestCase(1, "test", "test0")]
+        [TestCase(1, "test00000", "test0")]
+        [TestCase(1, "test", "test000000")]
         public async Task ChangePasswordUserAccount_ExistIdInvalid_ReturnBadRequest(int id, string currentPassword, string password)
         {
             // Arrange
