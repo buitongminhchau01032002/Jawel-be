@@ -13,12 +13,10 @@ namespace Jawel_be.Controllers
     public class CustomerAccountController : ControllerBase
     {
         private readonly ICustomerAccountService _customerAccountService;
-        private readonly IConfiguration _config;
 
-        public CustomerAccountController(ICustomerAccountService customerAccountService, IConfiguration config)
+        public CustomerAccountController(ICustomerAccountService customerAccountService)
         {
             _customerAccountService = customerAccountService;
-            _config = config;
         }
 
         [HttpGet]
@@ -57,44 +55,12 @@ namespace Jawel_be.Controllers
                 CustomerAccount newCustomerAccount = await _customerAccountService.CreateCustomerAccount(createCustomerAccountDto);
                 return CreatedAtAction(nameof(GetCustomerAccount), new { id = newCustomerAccount.Id }, newCustomerAccount.AsDto());
             }
-            catch (EntityNotFoundException ex)
-            {
-                return NotFound();
-            }
-        }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginCustomerAccountDto loginCustomerAccountDto)
-        {
-            var validator = new LoginCustomerAccountDtoValidator();
-            var validationResult = await validator.ValidateAsync(loginCustomerAccountDto);
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors);
-            }
-            var hashPassword = HashPassword.GetMD5(loginCustomerAccountDto.Password);
-            var customerAccount = await _customerAccountService.GetCustomerAccountByPhoneAndPassword(loginCustomerAccountDto.Phone, hashPassword);
-
-            if (customerAccount != null)
-            {
-                Jwt jwt = new Jwt(_config);
-                var loginResultDto = new LoginResultCustomerAccountDto()
-                {
-                    Id = customerAccount.Id,
-                    Phone = customerAccount.Phone,
-                    Name = customerAccount.Name,
-                    Gender = customerAccount.Gender,
-                    Avatar = customerAccount.Avatar,
-                    Address = customerAccount.Address,
-                    Token = jwt.GenerateToken(customerAccount)
-                };
-                return Ok(loginResultDto);
-            }
-            else
+            catch (AlreadyExistCustomerAccountException ex)
             {
                 return BadRequest();
             }
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCustomerAccount(int id, [FromBody] UpdateCustomerAccountDto updateCustomerAccountDto)
@@ -130,13 +96,7 @@ namespace Jawel_be.Controllers
                     return BadRequest(validationResult.Errors);
                 }
 
-                var hashPassword = new ChangePasswordCustomerAccountDto()
-                {
-                    CurrentPassword = HashPassword.GetMD5(changePasswordCustomerAccountDto.CurrentPassword),
-                    NewPassword = HashPassword.GetMD5(changePasswordCustomerAccountDto.NewPassword)
-                };
-
-                await _customerAccountService.ChangePasswordCustomerAccount(id, hashPassword);
+                await _customerAccountService.ChangePasswordCustomerAccount(id, changePasswordCustomerAccountDto);
                 return Ok();
             }
             catch (EntityNotFoundException ex)

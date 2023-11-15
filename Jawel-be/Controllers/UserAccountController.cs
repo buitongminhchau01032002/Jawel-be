@@ -13,12 +13,10 @@ namespace Jawel_be.Controllers
     public class UserAccountController : ControllerBase
     {
         private readonly IUserAccountService _userAccountService;
-        private readonly IConfiguration _config;
 
-        public UserAccountController(IUserAccountService userAccountService, IConfiguration config)
+        public UserAccountController(IUserAccountService userAccountService)
         {
             _userAccountService = userAccountService;
-            _config = config;
         }
 
         [HttpGet]
@@ -63,38 +61,6 @@ namespace Jawel_be.Controllers
             }
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginUserAccountDto loginUserAccountDto)
-        {
-            var validator = new LoginUserAccountDtoValidator();
-            var validationResult = await validator.ValidateAsync(loginUserAccountDto);
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors);
-            }
-            var hashPassword = HashPassword.GetMD5(loginUserAccountDto.Password);
-            var userAccount = await _userAccountService.GetUserAccountByUsernameAndPassword(loginUserAccountDto.Username, hashPassword);
-
-            if (userAccount != null)
-            {
-                Jwt jwt = new Jwt(_config);
-                var loginResultDto = new LoginResultUserAccountDto()
-                {
-                    Id = userAccount.Id,
-                    Username = userAccount.Username,
-                    Name = userAccount.Name,
-                    Gender = userAccount.Gender,
-                    Avatar = userAccount.Avatar,
-                    Role = userAccount.Role,
-                    Token = jwt.GenerateToken(userAccount)
-                };
-                return Ok(loginResultDto);
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUserAccount(int id, [FromBody] UpdateUserAccountDto updateUserAccountDto)
@@ -117,33 +83,6 @@ namespace Jawel_be.Controllers
             }
         }
 
-        [HttpPut("personal-info/{id}")]
-        public async Task<IActionResult> UpdatePersonalInfoUserAccount(int id, [FromBody] UpdatePersonalInfoUserAccountDto updatePersonalInfoUserAccountDto)
-        {
-            try
-            {
-                var validator = new UpdatePersonalInfoUserAccountDtoValidator();
-                var validationResult = await validator.ValidateAsync(updatePersonalInfoUserAccountDto);
-                if (!validationResult.IsValid)
-                {
-                    return BadRequest(validationResult.Errors);
-                }
-
-                var UpdateUserAccountDto = new UpdateUserAccountDto()
-                {
-                    Name = updatePersonalInfoUserAccountDto.Name,
-                    Avatar = updatePersonalInfoUserAccountDto.Avatar,
-                };
-
-                var userAccount = await _userAccountService.UpdateUserAccount(id, UpdateUserAccountDto);
-                return Ok(userAccount.AsDto());
-            }
-            catch (EntityNotFoundException ex)
-            {
-                return NotFound();
-            }
-        }
-
         [HttpPut("change-password/{id}")]
         public async Task<IActionResult> ChangePasswordUserAccount(int id, [FromBody] ChangePasswordUserAccountDto changePasswordUserAccountDto)
         {
@@ -156,13 +95,7 @@ namespace Jawel_be.Controllers
                     return BadRequest(validationResult.Errors);
                 }
 
-                var hashPassword = new ChangePasswordUserAccountDto()
-                {
-                    CurrentPassword = HashPassword.GetMD5(changePasswordUserAccountDto.CurrentPassword),
-                    NewPassword = HashPassword.GetMD5(changePasswordUserAccountDto.NewPassword)
-                };
-
-                await _userAccountService.ChangePasswordUserAccount(id, hashPassword);
+                await _userAccountService.ChangePasswordUserAccount(id, changePasswordUserAccountDto);
                 return Ok();
             }
             catch (EntityNotFoundException ex)

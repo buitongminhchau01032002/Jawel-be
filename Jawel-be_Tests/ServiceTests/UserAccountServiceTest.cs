@@ -173,9 +173,9 @@ namespace Jawal_beTests.ServiceTests
             var updateUserAccount = new UpdateUserAccountDto()
             {
                 Name = "Chau",
-                Gender = "Male",
+                Gender = "Female",
                 Role = "Admin",
-                Status = "Active"
+                Status = "Inactive"
             };
 
             // Act
@@ -238,7 +238,7 @@ namespace Jawal_beTests.ServiceTests
             await _userAccountService.DeleteUserAccount(id);
 
             // Assert
-            var userAccountInDb = await _dbContextTest.Categories.FindAsync(id);
+            var userAccountInDb = await _dbContextTest.UserAccounts.FindAsync(id);
             Assert.Null(userAccountInDb);
         }
 
@@ -277,6 +277,21 @@ namespace Jawal_beTests.ServiceTests
             Assert.NotNull(result);
             var expectedUserAccount = _userAccounts.Find(c => c.Username == username && c.Password == password);
             AssertUserAccount(expectedUserAccount, result);
+        }
+
+        [Test]
+        [TestCase("test", "test1")]
+        [TestCase("test4", "test4")]
+        [TestCase("test1", "test")]
+        public async Task GetUserAccountByUsernameAndPassword_NotExistUserAccount_ReturnNull(string username, string password)
+        {
+            // Arrange
+
+            // Act
+            var result = await _userAccountService.GetUserAccountByUsernameAndPassword(username, password);
+
+            // Assert
+            Assert.Null(result);
         }
 
         [Test]
@@ -372,6 +387,10 @@ namespace Jawal_beTests.ServiceTests
             if (expected.Name != null)
             {
                 Assert.AreEqual(expected.Name, actual.Name);
+            }
+            if (expected.Gender != null)
+            {
+                Assert.AreEqual(expected.Gender, actual.Gender);
             }
             if (expected.Status != null)
             {

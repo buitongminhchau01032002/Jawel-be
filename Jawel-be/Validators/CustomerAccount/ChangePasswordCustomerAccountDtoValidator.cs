@@ -7,7 +7,7 @@ namespace Jawel_be.Validators.CustomerAccount
     {
         public ChangePasswordCustomerAccountDtoValidator()
         {
-            RuleFor(x => x.CurrentPassword).NotNull().NotEmpty().MinimumLength(6);
+            //RuleFor(x => x.CurrentPassword).NotNull().NotEmpty().MinimumLength(6);
             RuleFor(x => x.NewPassword).NotNull().NotEmpty().MinimumLength(6);
         }
     }

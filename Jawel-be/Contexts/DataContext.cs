@@ -20,23 +20,23 @@ namespace Jawel_be.Contexts
         public virtual DbSet<UserAccount> UserAccounts { get; set; }
         public virtual DbSet<CustomerAccount> CustomerAccounts { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+            //base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Product>()
-                .HasOne(p => p.Category)
-                .WithMany()
-                .HasForeignKey(p => p.CategoryId)
-                .IsRequired();
+            //modelBuilder.Entity<Product>()
+            //    .HasOne(p => p.Category)
+            //    .WithMany()
+            //    .HasForeignKey(p => p.CategoryId)
+            //    .IsRequired();
 
-            modelBuilder.Entity<UserAccount>()
-                .HasIndex(u => u.Username)
-                .IsUnique();
+            //modelBuilder.Entity<UserAccount>()
+            //    .HasIndex(u => u.Username)
+            //    .IsUnique();
 
-            modelBuilder.Entity<CustomerAccount>()
-                .HasIndex(x => x.Phone)
-                .IsUnique();
+            //modelBuilder.Entity<CustomerAccount>()
+            //    .HasIndex(x => x.Phone)
+            //    .IsUnique();
 
             //modelBuilder.Entity<Category>().HasData(
             //    new Category { Id = 1, Name = "Nhẫn" },
@@ -59,7 +59,7 @@ namespace Jawel_be.Contexts
             //);
 
 
-        }
+        //}
     }
 
 }

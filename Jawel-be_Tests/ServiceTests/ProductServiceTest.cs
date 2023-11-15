@@ -1,9 +1,9 @@
 ﻿using Jawel_be.Contexts;
+using Jawel_be.Dtos.Product;
+using Jawel_be.Exceptions;
 using Jawel_be.Models;
 using Jawel_be.Services.ProductService;
-using Jawel_be.Dtos.Product;
 using Microsoft.EntityFrameworkCore;
-using Jawel_be.Exceptions;
 
 namespace Jawal_beTests.ServiceTests
 {
@@ -58,7 +58,7 @@ namespace Jawal_beTests.ServiceTests
             foreach (var product in _products)
             {
                 _dbContext.Products.Add(product);
-                
+
             }
             _dbContext.SaveChanges();
 
@@ -122,7 +122,8 @@ namespace Jawal_beTests.ServiceTests
         public async Task CreateProduct__SuccessAndReturnNewProduct()
         {
             // Arrange
-            var newProduct = new CreateProductDto() {
+            var newProduct = new CreateProductDto()
+            {
                 Name = "Nhẫn gì đó",
                 Description = "Mô tả",
                 Cost = 200000,
@@ -162,8 +163,8 @@ namespace Jawal_beTests.ServiceTests
                 var result = await _productService.CreateProduct(newProduct);
 
                 Assert.Fail();
-            } 
-            
+            }
+
             catch (EntityNotFoundException e)
             {
                 Assert.Pass();
@@ -176,7 +177,8 @@ namespace Jawal_beTests.ServiceTests
         public async Task UpdateProduct_ExistId_SuccessAndReturnUpdatedProduct(int id)
         {
             // Arrange
-            var updateProduct = new UpdateProductDto() {
+            var updateProduct = new UpdateProductDto()
+            {
                 Name = "Ten tgi do",
                 Description = "Mô tả cua ten gi do",
                 Cost = 200,
@@ -217,8 +219,8 @@ namespace Jawal_beTests.ServiceTests
                 var result = await _productService.UpdateProduct(1, updateProduct);
 
                 Assert.Fail();
-            } 
-            catch(EntityNotFoundException e)
+            }
+            catch (EntityNotFoundException e)
             {
                 Assert.Pass();
             }
