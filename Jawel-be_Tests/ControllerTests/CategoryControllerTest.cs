@@ -207,12 +207,6 @@ namespace Jawal_beTests.ControllerTests
             Assert.IsInstanceOf<NotFoundResult>(actionResult);
         }
 
-        private void AssertCategory(Category expected, Category actual)
-        {
-            Assert.AreEqual(expected.Id, actual.Id);
-            Assert.AreEqual(expected.Name, actual.Name);
-        }
-
         private void AssertCategory(Category expected, CategoryDto actual)
         {
             Assert.AreEqual(expected.Id, actual.Id);
