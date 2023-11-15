@@ -8,6 +8,8 @@ using Jawel_be.Services.CustomerAccountService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Moq;
+using System.Numerics;
+using System.Reflection;
 
 
 namespace Jawal_beTests.ControllerTests
@@ -90,10 +92,10 @@ namespace Jawal_beTests.ControllerTests
 
             [Test]
             public async Task CreateCustomerAccount_Valid_ReturnOkAndValueIsNewCustomerAccount()
-            {
-                // Arrange
-                CreateCustomerAccountDto createCustomerAccount = new CreateCustomerAccountDto { Phone = "3", Name = "Tester3", Password = "123456", Gender = "Male" };
-          
+        {
+            // Arrange
+            CreateCustomerAccountDto createCustomerAccount = new CreateCustomerAccountDto() { Phone = "3", Name = "Tester3", Password = "123456", Gender = "Male" };
+
             _mockService.Setup(m => m.CreateCustomerAccount(createCustomerAccount)).ReturnsAsync(new CustomerAccount() { Phone = createCustomerAccount.Phone, Name = createCustomerAccount.Name, Password = createCustomerAccount.Password, Gender = createCustomerAccount.Password });
 
             // Act
@@ -114,7 +116,7 @@ namespace Jawal_beTests.ControllerTests
             [TestCase("3", "Tester3", "123","Male")]
         //Case gender is not in "Male" or "Female"
              [TestCase("3", "Tester3", "123456", "Nam")]
-        public async Task CreateCategory_InvalidName_ReturnBadRequest(string phone, string name, string password, string gender)
+        public async Task CreateCustomerAccount_InvalidName_ReturnBadRequest(string phone, string name, string password, string gender)
             {
             // Arrange
             CreateCustomerAccountDto createCustomerAccount = new CreateCustomerAccountDto() { Phone = phone, Name = name, Password = password, Gender = gender };
@@ -129,79 +131,97 @@ namespace Jawal_beTests.ControllerTests
                 Assert.IsInstanceOf<BadRequestObjectResult>(actionResult);
             }
 
-         /*   [Test]
-            [TestCase(1)]
-            [TestCase(2)]
-            public async Task UpdateCategory_ExistIdAndValidName_ReturnOkAndValueIsUpdatedCategory(int id)
+        [Test]
+        [TestCase(1)]
+        [TestCase(2)]
+        public async Task UpdateCustomerAccount_ExistIdAndValidInformation_ReturnOkAndValueIsUpdatedCustomerAccount(int id)
+        {
+            // Arrange
+            UpdateCustomerAccountDto updateCustomerAccountDto = new UpdateCustomerAccountDto() { Name = "Updated name", Gender = "Female", Address = "Updated Adress" };
+            var matchedCustomerAccount = _customers.Find(x => x.Id == id);
+            CustomerAccount updatedCustomerAccount = new CustomerAccount();
+            if (matchedCustomerAccount != null)
             {
-                // Arrange
-                UpdateCategoryDto updateCategoryDto = new UpdateCategoryDto() { Name = "Updated name" };
-                var matchedCategory = _categories.Find(c => c.Id == id);
-                Category updatedCategory = new Category();
-                if (matchedCategory != null)
-                {
-                    updatedCategory = new Category { Id = matchedCategory.Id, Name = updateCategoryDto.Name };
-                    _mockService.Setup(m => m.UpdateCategory(id, updateCategoryDto)).ReturnsAsync(updatedCategory);
-                }
+                updatedCustomerAccount = new CustomerAccount { Phone = matchedCustomerAccount.Phone, Name = matchedCustomerAccount.Name, Password = matchedCustomerAccount.Password, Gender = matchedCustomerAccount.Password };
+                _mockService.Setup(m => m.UpdateCustomerAccount(id, updateCustomerAccountDto)).ReturnsAsync(updatedCustomerAccount);
 
-                // Act
-                var actionResult = await _controller.UpdateCategory(id, updateCategoryDto);
 
-                // Assert
-                Assert.IsInstanceOf<OkObjectResult>(actionResult);
-                var result = ((OkObjectResult)actionResult).Value as CategoryDto;
-                Assert.NotNull(result);
-                AssertCategory(updatedCategory, result);
             }
 
-            [Test]
-            [TestCase(1, "")]
-            [TestCase(2, "This length of string longer than 100 character. This length of string longer than 100 character. This length of string longer than 100 character.")]
-            public async Task UpdateCategory_ExistIdAndInvalidName_ReturnBadRequest(int id, string name)
+
+            // Act
+            var actionResult = await _controller.UpdateCustomerAccount(id, updateCustomerAccountDto);
+
+
+            // Assert
+            Assert.IsInstanceOf<OkObjectResult>(actionResult);
+            var result = ((OkObjectResult)actionResult).Value as CustomerAccountDto;
+            Assert.NotNull(result);
+            AssertCustomerAccount(updatedCustomerAccount, result);
+
+        }
+
+        [Test]
+        //Case all Empty
+        [TestCase(1,"", "", "")]
+        //Case gender is not in "Male" or "Female"
+        [TestCase(1, "Tester3",  "male", "UpdateAddress")]
+        
+       
+
+        public async Task UpdateCustomerAccount_ExistIdAndInvalidInformation_ReturnBadRequest(int id, string name, string gender, string address)
             {
-                // Arrange
-                UpdateCategoryDto updateCategoryDto = new UpdateCategoryDto() { Name = name };
-                var matchedCategory = _categories.Find(c => c.Id == id);
-                Category updatedCategory = new Category();
-                if (matchedCategory != null)
-                {
-                    updatedCategory = new Category { Id = matchedCategory.Id, Name = updateCategoryDto.Name };
-                    _mockService.Setup(m => m.UpdateCategory(id, updateCategoryDto)).ReturnsAsync(updatedCategory);
-                }
 
-                // Act
-                var actionResult = await _controller.UpdateCategory(id, updateCategoryDto);
+            // Arrange
+            UpdateCustomerAccountDto updateCustomerAccountDto = new UpdateCustomerAccountDto() { Name = name, Gender = gender, Address = address };
+            var matchedCustomerAccount = _customers.Find(x => x.Id == id);
+            CustomerAccount updatedCustomerAccount = new CustomerAccount();
+            if (matchedCustomerAccount != null)
+            {
+                updatedCustomerAccount = new CustomerAccount { Phone = matchedCustomerAccount.Phone, Name = matchedCustomerAccount.Name, Password = matchedCustomerAccount.Password, Gender = matchedCustomerAccount.Password };
+                _mockService.Setup(m => m.UpdateCustomerAccount(id, updateCustomerAccountDto)).ReturnsAsync(updatedCustomerAccount);
 
-                // Assert
-                Assert.IsInstanceOf<BadRequestObjectResult>(actionResult);
+
+            }
+
+
+            // Act
+            var actionResult = await _controller.UpdateCustomerAccount(id, updateCustomerAccountDto);
+
+
+            // Assert
+            Assert.IsInstanceOf<BadRequestObjectResult>(actionResult);
+
+           
             }
 
             [Test]
             [TestCase(0)]
             [TestCase(3)]
-            public async Task UpdateCategory_NotExistId_ReturnNotFound(int id)
+            public async Task UpdateCustomerAccount_NotExistId_ReturnNotFound(int id)
             {
-                // Arrange
-                UpdateCategoryDto updateCategoryDto = new UpdateCategoryDto() { Name = "Updated name" };
-                _mockService.Setup(m => m.UpdateCategory(id, updateCategoryDto)).Throws(new EntityNotFoundException());
+            // Arrange
+            UpdateCustomerAccountDto updateCustomerAccountDto = new UpdateCustomerAccountDto() { Name = "Updated name", Gender = "Female", Address = "Updated Adress" };
+            _mockService.Setup(m=>m.UpdateCustomerAccount(id, updateCustomerAccountDto)).Throws(new EntityNotFoundException());
 
-                // Act
-                var actionResult = await _controller.UpdateCategory(id, updateCategoryDto);
 
-                // Assert
-                Assert.IsInstanceOf<NotFoundResult>(actionResult);
+            // Act
+            var actionResult = await _controller.UpdateCustomerAccount(id, updateCustomerAccountDto);
+
+            // Assert
+            Assert.IsInstanceOf<NotFoundResult>(actionResult);
             }
 
             [Test]
             [TestCase(1)]
             [TestCase(2)]
-            public async Task DeleteCategory_ExistId_ReturnOk(int id)
+            public async Task DeleteCustomerAccount_ExistId_ReturnOk(int id)
             {
                 // Arrange
-                _mockService.Setup(m => m.DeleteCategory(id));
+                _mockService.Setup(m => m.DeleteCustomerAccount(id));
 
                 // Act
-                var actionResult = await _controller.DeleteCategory(id);
+                var actionResult = await _controller.DeleteCustomerAccount(id);
 
                 // Assert
                 Assert.IsInstanceOf<OkResult>(actionResult);
@@ -210,17 +230,94 @@ namespace Jawal_beTests.ControllerTests
             [Test]
             [TestCase(0)]
             [TestCase(3)]
-            public async Task DeleteCategory_NotExistId_ReturnNotFound(int id)
+            public async Task DeleteCustomerAccount_NotExistId_ReturnNotFound(int id)
             {
                 // Arrange
-                _mockService.Setup(m => m.DeleteCategory(id)).Throws(new EntityNotFoundException());
+                _mockService.Setup(m=> m.DeleteCustomerAccount(id)).Throws(new EntityNotFoundException());
+                
 
                 // Act
-                var actionResult = await _controller.DeleteCategory(id);
+                var actionResult = await _controller.DeleteCustomerAccount(id);
 
                 // Assert
                 Assert.IsInstanceOf<NotFoundResult>(actionResult);
-            }*/
+            }
+
+        [Test]
+        [TestCase(1)]
+
+        public async Task ChangePasswordCustomerAccount_ExistIdAndValidCurrentPasswordAndValidNewPassword_ReturnOK(int id)
+        {
+
+
+            // Arrange
+            ChangePasswordCustomerAccountDto changePasswordCustomerAccountDto = new ChangePasswordCustomerAccountDto() { CurrentPassword = "1", NewPassword = "123456" };
+
+
+            // Act
+            var actionResult = await _controller.ChangePasswordCustomerAccount(id, changePasswordCustomerAccountDto);
+
+
+            // Assert
+            Assert.IsInstanceOf<OkResult>(actionResult);
+            
+           
+
+        }
+
+
+
+
+        [Test]
+        [TestCase(0)]
+        [TestCase(3)]
+        public async Task ChangePasswordCustomerAccount_NotExistId_ThrowEntityNotFoundException(int id)
+        {
+           
+                // Arrange
+                ChangePasswordCustomerAccountDto changePasswordCustomerAccountDto = new ChangePasswordCustomerAccountDto() { CurrentPassword = "1", NewPassword = "123456" };
+            _mockService.Setup(m => m.ChangePasswordCustomerAccount(id, changePasswordCustomerAccountDto)).Throws(new EntityNotFoundException());
+            // Act
+            var actionResult = await _controller.ChangePasswordCustomerAccount(id, changePasswordCustomerAccountDto);
+
+
+            // Assert
+            Assert.IsInstanceOf<OkResult>(actionResult);
+        }
+
+        [Test]
+        [TestCase(1)]
+        public async Task ChangePasswordCustomerAccount_ExistIdAndInvalidNCurentPassword_CurrentPasswordIncorrectException(int id)
+        {
+            
+                // Arrange
+                ChangePasswordCustomerAccountDto changePasswordCustomerAccountDto = new ChangePasswordCustomerAccountDto() { CurrentPassword = "2", NewPassword = "123456" };
+               
+                // Act
+               var actionResult= await _controller.ChangePasswordCustomerAccount(id, changePasswordCustomerAccountDto);
+
+                // Assert
+                
+            Assert.IsInstanceOf<OkResult>(actionResult);
+            
+        }
+        [Test]
+        [TestCase(1)]
+        public async Task ChangePasswordCustomerAccount_ExistIdAndInvalidNNewPassword_CurrentPasswordIncorrectException(int id)
+        {
+
+            // Arrange
+            ChangePasswordCustomerAccountDto changePasswordCustomerAccountDto = new ChangePasswordCustomerAccountDto() { CurrentPassword = "1", NewPassword = "3" };
+
+            // Act
+            var actionResult = await _controller.ChangePasswordCustomerAccount(id, changePasswordCustomerAccountDto);
+
+            // Assert
+           
+            Assert.IsInstanceOf<OkResult>(actionResult);
+
+        }
+
 
         private void AssertCustomerAccount(CustomerAccount expected, CustomerAccount actual)
         {
