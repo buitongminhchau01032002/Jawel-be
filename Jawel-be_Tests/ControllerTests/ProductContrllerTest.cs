@@ -89,15 +89,10 @@ namespace Jawal_beTests.ControllerTests
 
             var okResult = ((OkObjectResult)actionResult).Value as List<ProductDto>;            
             Assert.NotNull(okResult);
+       
             for (int i = 0; i < _products.Count; i++)
             {
-                Assert.AreEqual(_products[i].Id, okResult[i].Id);
-                Assert.AreEqual(_products[i].Name, okResult[i].Name);
-                Assert.AreEqual(_products[i].Price, okResult[i].Price);
-                Assert.AreEqual(_products[i].Cost, okResult[i].Cost);
-                Assert.AreEqual(_products[i].Description, okResult[i].Description);
-                Assert.AreEqual(_products[i].CategoryId, okResult[i].Category.Id);
-                Assert.AreEqual(_products[i].Quantity, okResult[i].Quantity);
+                AssertProduct(_products[i], okResult[i]);
             }
         }
 
@@ -135,9 +130,49 @@ namespace Jawal_beTests.ControllerTests
             Assert.IsInstanceOf<NotFoundResult>(actionResult);
         }
 
+        [Test]
+        public async Task CreateProduct_Valid_ReturnOkAndValueIsNewCategory()
+        {
+            // Arrange
+            CreateProductDto createProduct = new CreateProductDto() { 
+                Name = "New product",
+                Description = "Mô tả",
+                Cost = 200000,
+                Price = 300000,
+                Quantity = 1,
+                CategoryId = 1,
+            };
+            _mockService.Setup(m => m.CreateProduct(createProduct)).ReturnsAsync(new Product() { 
+                Name = createProduct.Name ,
+                Description = createProduct.Description ,
+                Cost = createProduct.Cost ,
+                Price = createProduct.Price ,
+                Quantity = createProduct.Quantity ,
+                CategoryId = createProduct.CategoryId ,
+            });
+
+            // Act
+            var actionResult = await _controller.CreateProduct(createProduct);
+
+            // Assert
+            Assert.IsInstanceOf<CreatedAtActionResult>(actionResult);
+            var result = ((CreatedAtActionResult)actionResult).Value as ProductDto;
+            Assert.NotNull(result);
+            AssertProduct(createProduct, result);
+        }
+
         private void AssertProduct(Product? expected, ProductDto? result)
         {
             Assert.AreEqual(expected.Id, result.Id);
+            Assert.AreEqual(expected.Name, result.Name);
+            Assert.AreEqual(expected.Price, result.Price);
+            Assert.AreEqual(expected.Cost, result.Cost);
+            Assert.AreEqual(expected.Description, result.Description);
+            Assert.AreEqual(expected.CategoryId, result.Category.Id);
+            Assert.AreEqual(expected.Quantity, result.Quantity);
+        }
+        private void AssertProduct(CreateProductDto expected, ProductDto result)
+        {
             Assert.AreEqual(expected.Name, result.Name);
             Assert.AreEqual(expected.Price, result.Price);
             Assert.AreEqual(expected.Cost, result.Cost);
