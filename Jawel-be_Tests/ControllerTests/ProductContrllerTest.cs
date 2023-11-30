@@ -149,6 +149,7 @@ namespace Jawal_beTests.ControllerTests
                 Price = createProduct.Price ,
                 Quantity = createProduct.Quantity ,
                 CategoryId = createProduct.CategoryId ,
+                Category = new Category() { Id = createProduct.CategoryId}
             });
 
             // Act
