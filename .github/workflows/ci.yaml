@@ -21,4 +21,4 @@ jobs:
       - name: Run Tests
         run: dotnet test
       - name: Run Mutation Testing
-        run: dotnet stryker
+        run: dotnet tool restore && dotnet stryker
